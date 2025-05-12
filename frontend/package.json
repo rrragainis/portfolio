@@ -12,6 +12,7 @@
     "bootstrap": "^5.3.3",
     "core-js": "^3.36.0",
     "cropperjs": "^1.6.1",
+    "cross-spawn": ">=6.0.6",
     "events": "^3.3.0",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
