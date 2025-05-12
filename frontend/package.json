@@ -26,11 +26,11 @@
     "@vue/devtools-api": "^6.5.1",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.22.0",
-    "html-webpack-plugin": "^4.5.2",
+    "html-webpack-plugin": "^5.5.4",
     "postcss": "^8.4.35",
     "postcss-loader": "^8.1.0",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^4.10.0"
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   },
   "eslintConfig": {
     "root": true,
