@@ -4,5 +4,15 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: '/',
   assetsDir: 'static',
-  productionSourceMap: false
+  productionSourceMap: false,
+  configureWebpack: {
+    resolve: {
+      fallback: {
+        "events": require.resolve("events/"),
+        "path": false,
+        "fs": false,
+        "crypto": false
+      }
+    }
+  }
 })
