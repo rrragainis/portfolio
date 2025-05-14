@@ -13,7 +13,7 @@
     "bootstrap": "^5.3.3",
     "core-js": "^3.36.0",
     "cropperjs": "^1.6.1",
-    "cross-spawn": ">=6.0.6",
+    "cross-spawn": "^6.0.6",
     "events": "^3.3.0",
     "postcss": "^8.4.35",
     "vue": "^3.4.19",
@@ -27,7 +27,7 @@
     "@vue/cli-plugin-router": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "@vue/devtools-api": "^6.5.1",
-    "cross-spawn": ">=6.0.6",
+    "cross-spawn": "^6.0.6",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.22.0",
     "html-webpack-plugin": "^5.5.4",
@@ -52,9 +52,9 @@
     "rules": {}
   },
   "resolutions": {
-    "cross-spawn": ">=7.0.6",
-    "postcss": ">=8.4.35",
-    "yorkie/cross-spawn": ">=7.0.6",
-    "@vue/component-compiler-utils/postcss": ">=8.4.35"
+    "cross-spawn": "7.0.6",
+    "postcss": "8.4.35",
+    "yorkie/cross-spawn": "7.0.6",
+    "@vue/component-compiler-utils/postcss": "8.4.35"
   }
 }
