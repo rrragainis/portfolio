@@ -36,7 +36,7 @@ class AudioController extends Controller
                 $mp3File = $request->file('mp3_file');
                 $mp3Name = 'audio_' . time() . '.mp3';
                 $mp3File->move($uploadPath, $mp3Name);
-                $validated['mp3_file'] = 'http://localhost:8000/uploads/' . $mp3Name;
+                $validated['mp3_file'] = env('APP_URL') . '/uploads/' . $mp3Name;
             } else {
                 throw new \Exception('MP3 file is required');
             }
@@ -47,13 +47,13 @@ class AudioController extends Controller
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'audio_thumb_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = 'http://localhost:8000/uploads/' . $croppedImageName;
+                $croppedImagePath = env('APP_URL') . '/uploads/' . $croppedImageName;
                 
                 // Save original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'audio_original_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = 'http://localhost:8000/uploads/' . $originalImageName;
+                $originalImagePath = env('APP_URL') . '/uploads/' . $originalImageName;
                 
                 $validated['cropped_image'] = $croppedImagePath;
                 $validated['image_link'] = $originalImagePath;
@@ -107,7 +107,7 @@ class AudioController extends Controller
                 $mp3File = $request->file('mp3_file');
                 $mp3Name = 'audio_' . time() . '.mp3';
                 $mp3File->move($uploadPath, $mp3Name);
-                $validated['mp3_file'] = 'http://localhost:8000/uploads/' . $mp3Name;
+                $validated['mp3_file'] = env('APP_URL') . '/uploads/' . $mp3Name;
             }
 
             // Handle images if provided
@@ -133,13 +133,13 @@ class AudioController extends Controller
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'audio_thumb_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = 'http://localhost:8000/uploads/' . $croppedImageName;
+                $croppedImagePath = env('APP_URL') . '/uploads/' . $croppedImageName;
                 
                 // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'audio_original_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = 'http://localhost:8000/uploads/' . $originalImageName;
+                $originalImagePath = env('APP_URL') . '/uploads/' . $originalImageName;
                 
                 $validated['cropped_image'] = $croppedImagePath;
                 $validated['image_link'] = $originalImagePath;

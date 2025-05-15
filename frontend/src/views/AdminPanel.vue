@@ -275,7 +275,7 @@ export default {
       if (!imagePath) return ''
       if (imagePath.startsWith('http')) return imagePath
       if (imagePath.startsWith('data:')) return imagePath
-      return `http://localhost:8000${imagePath}`
+      return `http://localhost:80${imagePath}`
     },
     async loadData() {
       try {

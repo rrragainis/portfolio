@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 // Configure axios defaults
-axios.defaults.baseURL = process.env.VUE_APP_API_URL || 'http://localhost:8000'
+axios.defaults.baseURL = process.env.VUE_APP_API_URL || 'http://localhost:80'
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 const app = createApp(App)

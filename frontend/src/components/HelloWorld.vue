@@ -106,7 +106,6 @@
     >
       <div class="modal-content" @click.stop>
         <button class="close-button" @click="closeModal">&times;</button>
-        <!-- AUDIO POPUP -->
         <template v-if="selectedType === 'audio'">
           <div class="audio-popup">
             <div class="audio-row">
