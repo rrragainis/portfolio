@@ -1,31 +1,20 @@
 version: '3.8'
 
 services:
-  # Nginx reverse proxy
-  nginx:
-    image: nginx:stable-alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - frontend
-      - backend
-    restart: always
-    networks:
-      - app-network
-
-  # Frontend service
+  # Frontend service with Nginx
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - BACKEND_URL=${BACKEND_URL:-http://backend:8000}
+      - BACKEND_URL=http://backend:8000
       - PORT=80
+    ports:
+      - "80:80"
     networks:
       - app-network
+    depends_on:
+      - backend
     restart: always
 
   # Backend service
@@ -35,37 +24,51 @@ services:
       dockerfile: Dockerfile
     environment:
       - APP_ENV=production
-      - APP_KEY=${APP_KEY}
       - APP_DEBUG=false
+      - APP_KEY=${APP_KEY:-base64:randomkey1234567890}
+      - APP_URL=http://backend:8000
       - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE:-portfolio}
+      - DB_USERNAME=${DB_USERNAME:-portfolio}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
     volumes:
-      - ./backend/storage:/var/www/html/storage
-      - ./backend/bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
+    ports:
+      - "8000:8000"
     networks:
       - app-network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # Database service
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE:-portfolio}
+      - MYSQL_USER=${DB_USERNAME:-portfolio}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-rootpassword}
     volumes:
       - dbdata:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - app-network
     restart: always
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 5s
+      retries: 10
 
   # Certbot for SSL certificates
   certbot:

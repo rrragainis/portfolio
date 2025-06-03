@@ -1,0 +1,146 @@
+# Dependency directories
+/vendor/
+/node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+/storage/*.log
+*.log
+
+# Cache and compiled files
+/bootstrap/cache/*
+/storage/framework/views/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+
+# Application caches
+*.cache
+.phpunit.result.cache
+
+# Testing
+/coverage
+/phpunit.xml
+
+# IDE specific files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local development files
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+Homestead.yaml.example
+npm-debug.log
+yarn-error.log
+
+# Debugbar
+_ide_helper.php
+_ide_helper_models.php
+_ide_helper_models_meta.php
+_ide_helper_properties.json
+_ide_helper_relations.php
+_ide_helper_traits.php
+
+# Deployment
+/.fabric
+/.env.development
+/.env.testing
+/.env.production
+
+# Git
+.git
+.gitattributes
+.gitignore
+.gitmodules
+
+# IDE
+.idea
+.phpstorm.meta.php
+.project
+.settings/
+.buildpath
+
+# Composer
+composer.phar
+composer.lock
+
+# NPM
+package-lock.json
+yarn.lock
+
+# PHPUnit
+.phpunit.cache/
+.phpunit.result.cache
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+.php-cs-fixer.php
+
+# PHPStan
+.phpstan/
+
+# PHP_CodeSniffer
+.phpcs-cache
+
+# PHP Mess Detector
+phpmd.xml
+
+# PHPUnit
+phpunit.xml
+
+# PHP Code Coverage
+.clover
+
+# PHPUnit Cache
+.phpunit.result.cache
+
+# PHPUnit Coverage
+coverage/
+
+# PHPUnit Logs
+/tests/_output/
+
+# Local development
+Homestead.yaml
+Homestead.json
+/.vagrant
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.gitignore.io/api/laravel,node,php,windows
