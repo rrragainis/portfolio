@@ -42,13 +42,13 @@ class ProgrammingController extends Controller
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'programming_thumb_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = 'http://localhost:8000/uploads/' . $croppedImageName;
+                $croppedImagePath = url('uploads/' . $croppedImageName);
                 
                 // Save original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'programming_original_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = 'http://localhost:8000/uploads/' . $originalImageName;
+                $originalImagePath = url('uploads/' . $originalImageName);
                 
                 $validated['cropped_image'] = $croppedImagePath;
                 $validated['image_link'] = $originalImagePath;
@@ -116,13 +116,13 @@ class ProgrammingController extends Controller
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'programming_thumb_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = 'http://localhost:8000/uploads/' . $croppedImageName;
+                $croppedImagePath = url('uploads/' . $croppedImageName);
                 
                 // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'programming_original_' . time() . '.jpg';
                 file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = 'http://localhost:8000/uploads/' . $originalImageName;
+                $originalImagePath = url('uploads/' . $originalImageName);
                 
                 $validated['cropped_image'] = $croppedImagePath;
                 $validated['image_link'] = $originalImagePath;
