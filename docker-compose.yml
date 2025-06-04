@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   backend:
     build:
@@ -10,14 +11,23 @@ services:
       - backend_database:/var/www/html/database
     environment:
       - APP_ENV=production
-      - APP_KEY=base64:YOUR_APP_KEY_HERE
+      - APP_KEY=base64:uenngkW3uPYTTmiB9eYAdiagf6RfwIrLluprMvZtwxs=
       - APP_URL=http://46.101.117.113
       - FRONTEND_URL=http://46.101.117.113
       - SANCTUM_STATEFUL_DOMAINS=46.101.117.113,localhost,localhost:8080
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=portfolio
+      - DB_USERNAME=portfolio
+      - DB_PASSWORD=portfolio
+      - PHP_UPLOAD_MAX_FILESIZE=20M
+      - PHP_POST_MAX_SIZE=20M
     expose:
       - 8000
     depends_on:
-      - frontend
+      - db
+
   frontend:
     build:
       context: ./frontend
@@ -26,6 +36,21 @@ services:
       - VUE_APP_API_URL=http://46.101.117.113/api
     expose:
       - 80
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: portfolio
+      MYSQL_USER: portfolio
+      MYSQL_PASSWORD: portfolio
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -36,6 +61,8 @@ services:
     depends_on:
       - backend
       - frontend
+
 volumes:
   backend_storage:
-  backend_database: 
+  backend_database:
+  db_data:
