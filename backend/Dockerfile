@@ -24,15 +24,18 @@ WORKDIR /var/www/html
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader
-php artisan storage:link
-# Copy existing application directory contents
-COPY . /var/www/html
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN echo "upload_max_filesize=20M\npost_max_size=20M" > /usr/local/etc/php/conf.d/uploads.ini
+
+# Set PHP upload limits
+RUN echo "upload_max_filesize=50M\npost_max_size=50M" > /usr/local/etc/php/conf.d/uploads.ini
+
+# Create storage symlink
+RUN php artisan storage:link
+
 # Expose port 8000
 EXPOSE 8000
 
-# Start PHP-FPM and Nginx
+# Start the Laravel development server
 CMD php artisan serve --host=0.0.0.0 --port=8000

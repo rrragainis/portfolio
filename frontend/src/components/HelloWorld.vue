@@ -43,7 +43,7 @@
 
         <div class="section programming" id="programming">
           <h2>{{ lang === 'lv' ? 'programmēšanas darbi:' : 'coding:' }}</h2>
-          <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough, or I am allowed to showcase.' }}</p>
+          <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough to showcase, or I am allowed to showcase.' }}</p>
           <div class="card-grid">
             <div v-for="item in programmings" :key="item.id" class="work-card" @click="showDetails('programming', item)">
               <img :src="item.cropped_image" :alt="lang === 'lv' ? item.latvian_name : item.english_name" class="work-card-image">
