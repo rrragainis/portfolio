@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Create SQLite database if it doesn't exist
+# Create database file if it doesn't exist
 touch database/database.sqlite
+chmod 666 database/database.sqlite
 
 # Generate application key if not exists
 if [ -z "$(grep '^APP_KEY=base64:' .env)" ]; then
@@ -15,8 +16,8 @@ php artisan migrate --force
 php artisan config:cache
 
 # Set storage permissions
-chown -R www-data:www-data storage database
-chmod -R 775 storage bootstrap/cache database
+chown -R www-data:www-data storage
+chmod -R 775 storage bootstrap/cache
 
 # Start Apache
 apache2-foreground

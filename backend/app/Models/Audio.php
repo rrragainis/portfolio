@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Audio extends Model
 {
+    protected $connection = 'sqlite';
+    
     protected $fillable = [
         'latvian_name',
         'english_name',

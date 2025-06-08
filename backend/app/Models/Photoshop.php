@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photoshop extends Model
 {
+    protected $connection = 'sqlite';
+    
     protected $fillable = [
         'latvian_name',
         'english_name',
