@@ -1,10 +1,7 @@
 #!/bin/sh
 
-# Wait for the database to be ready
-until php artisan db:monitor > /dev/null 2>&1; do
-    echo "Waiting for database connection..."
-    sleep 1
-done
+# Create SQLite database if it doesn't exist
+touch database/database.sqlite
 
 # Generate application key if not exists
 if [ -z "$(grep '^APP_KEY=base64:' .env)" ]; then
@@ -18,8 +15,8 @@ php artisan migrate --force
 php artisan config:cache
 
 # Set storage permissions
-chown -R www-data:www-data storage
-chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage database
+chmod -R 775 storage bootstrap/cache database
 
 # Start Apache
 apache2-foreground
