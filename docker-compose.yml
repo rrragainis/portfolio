@@ -15,7 +15,7 @@ services:
       - FRONTEND_URL=http://46.101.117.113
       - SANCTUM_STATEFUL_DOMAINS=46.101.117.113,localhost,localhost:8080
       - DB_CONNECTION=sqlite
-      - DB_DATABASE=database/database.sqlite
+      - DB_DATABASE=/var/www/html/storage/database.sqlite
       - PHP_UPLOAD_MAX_FILESIZE=20M
       - PHP_POST_MAX_SIZE=20M
     expose:

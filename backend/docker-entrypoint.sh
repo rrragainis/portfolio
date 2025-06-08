@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Create database file if it doesn't exist
-touch database/database.sqlite
-chmod 666 database/database.sqlite
+touch /var/www/html/storage/database.sqlite
+chmod 666 /var/www/html/storage/database.sqlite
 
 # Generate application key if not exists
 if [ -z "$(grep '^APP_KEY=base64:' .env)" ]; then
@@ -16,8 +16,8 @@ php artisan migrate --force
 php artisan config:cache
 
 # Set storage permissions
-chown -R www-data:www-data storage
-chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Start Apache
 apache2-foreground
