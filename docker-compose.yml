@@ -12,9 +12,9 @@ services:
     environment:
       - APP_ENV=production
       - APP_KEY=base64:uenngkW3uPYTTmiB9eYAdiagf6RfwIrLluprMvZtwxs=
-      - APP_URL=http://www.rrragainis.lv
-      - FRONTEND_URL=http://www.rrragainis.lv
-      - SANCTUM_STATEFUL_DOMAINS=www.rrragainis.lv,rrragainis.lv,46.101.117.113,[2a03:b0c0:3:f0::f2df:8000],10.114.0.2,129.212.142.67
+      - APP_URL=http://46.101.117.113
+      - FRONTEND_URL=http://46.101.117.113
+      - SANCTUM_STATEFUL_DOMAINS=46.101.117.113,www.rrragainis.lv,rrragainis.lv
       - DB_CONNECTION=sqlite
       - DB_DATABASE=/var/www/html/database/database.sqlite
       - PHP_UPLOAD_MAX_FILESIZE=20M
@@ -27,7 +27,7 @@ services:
       context: ./frontend
     container_name: frontend
     environment:
-      - VUE_APP_API_URL=http://www.rrragainis.lv/api
+      - VUE_APP_API_URL=http://46.101.117.113/api
     expose:
       - 80
 

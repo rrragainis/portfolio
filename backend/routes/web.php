@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/adminpanel', [AdminController::class, 'index'])->name('admin.index');
