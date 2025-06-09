@@ -12,8 +12,8 @@ services:
     environment:
       - APP_ENV=production
       - APP_KEY=base64:uenngkW3uPYTTmiB9eYAdiagf6RfwIrLluprMvZtwxs=
-      - APP_URL=https://www.rrragainis.lv
-      - FRONTEND_URL=https://www.rrragainis.lv
+      - APP_URL=http://www.rrragainis.lv
+      - FRONTEND_URL=http://www.rrragainis.lv
       - SANCTUM_STATEFUL_DOMAINS=www.rrragainis.lv,rrragainis.lv,46.101.117.113,[2a03:b0c0:3:f0::f2df:8000],10.114.0.2,129.212.142.67
       - DB_CONNECTION=sqlite
       - DB_DATABASE=/var/www/html/database/database.sqlite
@@ -27,7 +27,7 @@ services:
       context: ./frontend
     container_name: frontend
     environment:
-      - VUE_APP_API_URL=https://www.rrragainis.lv/api
+      - VUE_APP_API_URL=http://www.rrragainis.lv/api
     expose:
       - 80
 
@@ -36,10 +36,8 @@ services:
     container_name: nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
     depends_on:
       - backend
       - frontend
