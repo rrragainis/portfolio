@@ -308,7 +308,6 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 20px;
-  justify-content: center;
 }
 
 .card-grid.large {
@@ -568,6 +567,7 @@ html {
   .card-grid {
     gap: 15px;
     padding: 0 10px;
+    justify-content: center;
   }
 
   .work-card {
