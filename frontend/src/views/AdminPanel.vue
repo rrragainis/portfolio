@@ -124,7 +124,7 @@
               </div>
               <div v-if="currentType === 'audio'" class="mb-3">
                 <label for="mp3File" class="form-label">MP3 File</label>
-                <input type="file" class="form-control" @change="handleMp3Upload" accept="audio/mp3">
+                <input type="file" class="form-control" @change="handleMp3Upload" accept="audio/mp3" :required="!editingItem">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>

@@ -106,29 +106,17 @@ class PhotoshopController extends Controller
                 $croppedImageName = 'photoshop_thumb_' . time() . '.webp';
                 $croppedImagePath = $uploadPath . '/' . $croppedImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($croppedImageData);
-                if ($image === false) {
-                    throw new \Exception('Failed to create image from string');
-                }
-                imagewebp($image, $croppedImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($croppedImagePath, $croppedImageData);
                 $croppedImageUrl = url('uploads/' . $croppedImageName);
                 
-                // Save new original image as WebP
+                // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'photoshop_original_' . time() . '.webp';
                 $originalImagePath = $uploadPath . '/' . $originalImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($originalImageData);
-                if ($image === false) {
-                    throw new \Exception('Failed to create image from string');
-                }
-                imagewebp($image, $originalImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($originalImagePath, $originalImageData);
                 $originalImageUrl = url('uploads/' . $originalImageName);
                 
                 $validated['cropped_image'] = $croppedImageUrl;

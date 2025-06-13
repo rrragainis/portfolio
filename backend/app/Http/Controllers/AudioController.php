@@ -79,13 +79,13 @@ class AudioController extends Controller
     {
         try {
             $validated = $request->validate([
-                'latvian_name' => 'sometimes|required|string|max:255',
-                'english_name' => 'sometimes|required|string|max:255',
-                'latvian_description' => 'sometimes|required|string',
-                'english_description' => 'sometimes|required|string',
-                'cropped_image' => 'sometimes|required|string',
-                'original_image' => 'sometimes|required|string',
-                'mp3_file' => 'sometimes|required|file|mimes:mp3|max:10240'
+                'latvian_name' => 'required|string|max:255',
+                'english_name' => 'required|string|max:255',
+                'latvian_description' => 'required|string',
+                'english_description' => 'required|string',
+                'cropped_image' => 'sometimes|string',
+                'original_image' => 'sometimes|string',
+                'mp3_file' => 'sometimes|file|mimes:mp3|max:10240'
             ]);
 
             // Create uploads directory if it doesn't exist
@@ -98,9 +98,9 @@ class AudioController extends Controller
             if ($request->hasFile('mp3_file')) {
                 // Delete old MP3 if it exists
                 if ($audio->mp3_file) {
-                    $oldMp3Path = public_path(ltrim(parse_url($audio->mp3_file, PHP_URL_PATH), '/'));
+                    $oldMp3Path = public_path(str_replace(url('/'), '', $audio->mp3_file));
                     if (file_exists($oldMp3Path)) {
-                        @unlink($oldMp3Path);
+                        unlink($oldMp3Path);
                     }
                 }
 
@@ -108,6 +108,8 @@ class AudioController extends Controller
                 $mp3Name = 'audio_' . time() . '.mp3';
                 $mp3File->move($uploadPath, $mp3Name);
                 $validated['mp3_file'] = url('uploads/' . $mp3Name);
+            } else {
+                unset($validated['mp3_file']);
             }
 
             // Handle images if provided
@@ -117,40 +119,34 @@ class AudioController extends Controller
                 
                 // Delete old images if they exist
                 if ($audio->cropped_image) {
-                    $oldCroppedPath = public_path(ltrim(parse_url($audio->cropped_image, PHP_URL_PATH), '/'));
+                    $oldCroppedPath = public_path(str_replace(url('/'), '', $audio->cropped_image));
                     if (file_exists($oldCroppedPath)) {
-                        @unlink($oldCroppedPath);
+                        unlink($oldCroppedPath);
                     }
                 }
                 if ($audio->image_link) {
-                    $oldOriginalPath = public_path(ltrim(parse_url($audio->image_link, PHP_URL_PATH), '/'));
+                    $oldOriginalPath = public_path(str_replace(url('/'), '', $audio->image_link));
                     if (file_exists($oldOriginalPath)) {
-                        @unlink($oldOriginalPath);
+                        unlink($oldOriginalPath);
                     }
                 }
 
-                // Save new cropped image as WebP
+                // Save new cropped image
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'audio_thumb_' . time() . '.webp';
                 $croppedImagePath = $uploadPath . '/' . $croppedImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($croppedImageData);
-                imagewebp($image, $croppedImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($croppedImagePath, $croppedImageData);
                 $croppedImageUrl = url('uploads/' . $croppedImageName);
                 
-                // Save new original image as WebP
+                // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'audio_original_' . time() . '.webp';
                 $originalImagePath = $uploadPath . '/' . $originalImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($originalImageData);
-                imagewebp($image, $originalImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($originalImagePath, $originalImageData);
                 $originalImageUrl = url('uploads/' . $originalImageName);
                 
                 $validated['cropped_image'] = $croppedImageUrl;

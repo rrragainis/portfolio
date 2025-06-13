@@ -79,12 +79,12 @@ class ProgrammingController extends Controller
     {
         try {
             $validated = $request->validate([
-                'latvian_name' => 'sometimes|required|string|max:255',
-                'english_name' => 'sometimes|required|string|max:255',
-                'latvian_description' => 'sometimes|required|string',
-                'english_description' => 'sometimes|required|string',
-                'cropped_image' => 'sometimes|required|string',
-                'original_image' => 'sometimes|required|string'
+                'latvian_name' => 'required|string|max:255',
+                'english_name' => 'required|string|max:255',
+                'latvian_description' => 'required|string',
+                'english_description' => 'required|string',
+                'cropped_image' => 'sometimes|string',
+                'original_image' => 'sometimes|string'
             ]);
 
             // Create uploads directory if it doesn't exist
@@ -100,40 +100,34 @@ class ProgrammingController extends Controller
                 
                 // Delete old images if they exist
                 if ($programming->cropped_image) {
-                    $oldCroppedPath = public_path(ltrim(parse_url($programming->cropped_image, PHP_URL_PATH), '/'));
+                    $oldCroppedPath = public_path(str_replace(url('/'), '', $programming->cropped_image));
                     if (file_exists($oldCroppedPath)) {
-                        @unlink($oldCroppedPath);
+                        unlink($oldCroppedPath);
                     }
                 }
                 if ($programming->image_link) {
-                    $oldOriginalPath = public_path(ltrim(parse_url($programming->image_link, PHP_URL_PATH), '/'));
+                    $oldOriginalPath = public_path(str_replace(url('/'), '', $programming->image_link));
                     if (file_exists($oldOriginalPath)) {
-                        @unlink($oldOriginalPath);
+                        unlink($oldOriginalPath);
                     }
                 }
 
-                // Save new cropped image as WebP
+                // Save new cropped image
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'programming_thumb_' . time() . '.webp';
                 $croppedImagePath = $uploadPath . '/' . $croppedImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($croppedImageData);
-                imagewebp($image, $croppedImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($croppedImagePath, $croppedImageData);
                 $croppedImageUrl = url('uploads/' . $croppedImageName);
                 
-                // Save new original image as WebP
+                // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'programming_original_' . time() . '.webp';
                 $originalImagePath = $uploadPath . '/' . $originalImageName;
                 
-                // Convert to WebP
-                $image = imagecreatefromstring($originalImageData);
-                imagewebp($image, $originalImagePath, 80);
-                imagedestroy($image);
-                
+                // Save the image directly without conversion
+                file_put_contents($originalImagePath, $originalImageData);
                 $originalImageUrl = url('uploads/' . $originalImageName);
                 
                 $validated['cropped_image'] = $croppedImageUrl;

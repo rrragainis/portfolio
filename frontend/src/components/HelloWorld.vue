@@ -308,6 +308,7 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 20px;
+  justify-content: center;
 }
 
 .card-grid.large {
@@ -559,21 +560,25 @@ html {
 
 .audio-player-bar {
   width: calc(100% - 80px);
-  margin: 32px auto 0 auto;
+  margin: 32px auto 40px auto;
   display: block;
 }
 
 @media (max-width: 768px) {
-  .modal-content {
-    max-width: 90vw;
-    min-width: unset;
-    margin: 20px;
-    max-height: 90vh;
+  .card-grid {
+    gap: 15px;
+    padding: 0 10px;
   }
 
-  .close-button {
-    top: 15px;
-    left: 15px;
+  .work-card {
+    width: calc(50% - 15px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .audio-player-bar {
+    width: calc(100% - 40px);
+    margin: 24px auto 32px auto;
   }
 
   .contact-section {
@@ -581,10 +586,12 @@ html {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    padding: 0 20px;
   }
 
   .contact-section h2 {
     margin-bottom: 0;
+    order: 1;
   }
 
   .contact-links {
@@ -592,11 +599,7 @@ html {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-  }
-
-  .audio-player-bar {
-    width: calc(100% - 40px);
-    margin: 24px auto 0 auto;
+    order: 2;
   }
 }
 </style>
