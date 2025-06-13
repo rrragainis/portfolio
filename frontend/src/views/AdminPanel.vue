@@ -119,7 +119,7 @@
               </div>
               <div class="mb-3">
                 <label for="image" class="form-label">Main Image</label>
-                <input type="file" class="form-control" @change="handleImageUpload" accept="image/*" required>
+                <input type="file" class="form-control" @change="handleImageUpload" accept="image/*" :required="!editingItem">
                 <img v-if="formData.imagePreview" :src="formData.imagePreview" class="image-preview mt-2">
               </div>
               <div v-if="currentType === 'audio'" class="mb-3">

@@ -68,12 +68,12 @@ class PhotoshopController extends Controller
     {
         try {
             $validated = $request->validate([
-                'latvian_name' => 'sometimes|required|string|max:255',
-                'english_name' => 'sometimes|required|string|max:255',
-                'latvian_description' => 'sometimes|required|string',
-                'english_description' => 'sometimes|required|string',
-                'cropped_image' => 'sometimes|required|string',
-                'original_image' => 'sometimes|required|string'
+                'latvian_name' => 'required|string|max:255',
+                'english_name' => 'required|string|max:255',
+                'latvian_description' => 'required|string',
+                'english_description' => 'required|string',
+                'cropped_image' => 'sometimes|string',
+                'original_image' => 'sometimes|string'
             ]);
 
             // Create uploads directory if it doesn't exist
@@ -82,32 +82,35 @@ class PhotoshopController extends Controller
                 mkdir($uploadPath, 0777, true);
             }
 
-            // Only process images if they're provided and are base64 strings
+            // Handle images if provided
             if (isset($validated['cropped_image']) && isset($validated['original_image']) && 
                 strpos($validated['cropped_image'], 'data:image') === 0 && 
                 strpos($validated['original_image'], 'data:image') === 0) {
                 
                 // Delete old images if they exist
                 if ($photoshop->cropped_image) {
-                    $oldCroppedPath = public_path(ltrim(parse_url($photoshop->cropped_image, PHP_URL_PATH), '/'));
+                    $oldCroppedPath = public_path(str_replace(url('/'), '', $photoshop->cropped_image));
                     if (file_exists($oldCroppedPath)) {
-                        @unlink($oldCroppedPath);
+                        unlink($oldCroppedPath);
                     }
                 }
                 if ($photoshop->image_link) {
-                    $oldOriginalPath = public_path(ltrim(parse_url($photoshop->image_link, PHP_URL_PATH), '/'));
+                    $oldOriginalPath = public_path(str_replace(url('/'), '', $photoshop->image_link));
                     if (file_exists($oldOriginalPath)) {
-                        @unlink($oldOriginalPath);
+                        unlink($oldOriginalPath);
                     }
                 }
 
-                // Save new cropped image as WebP
+                // Save new cropped image
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'photoshop_thumb_' . time() . '.webp';
                 $croppedImagePath = $uploadPath . '/' . $croppedImageName;
                 
                 // Convert to WebP
                 $image = imagecreatefromstring($croppedImageData);
+                if ($image === false) {
+                    throw new \Exception('Failed to create image from string');
+                }
                 imagewebp($image, $croppedImagePath, 80);
                 imagedestroy($image);
                 
@@ -120,6 +123,9 @@ class PhotoshopController extends Controller
                 
                 // Convert to WebP
                 $image = imagecreatefromstring($originalImageData);
+                if ($image === false) {
+                    throw new \Exception('Failed to create image from string');
+                }
                 imagewebp($image, $originalImagePath, 80);
                 imagedestroy($image);
                 

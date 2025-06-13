@@ -557,6 +557,12 @@ html {
   scroll-behavior: smooth;
 }
 
+.audio-player-bar {
+  width: calc(100% - 80px);
+  margin: 32px auto 0 auto;
+  display: block;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     max-width: 90vw;
@@ -586,6 +592,11 @@ html {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+  }
+
+  .audio-player-bar {
+    width: calc(100% - 40px);
+    margin: 24px auto 0 auto;
   }
 }
 </style>
