@@ -441,7 +441,9 @@ export default {
         
         let response
         if (this.editingItem) {
-          response = await axios.put(`/api/${endpoint}/${this.editingItem.id}`, formData)
+          // For updates, we need to send the _method field for Laravel to recognize it as a PUT request
+          formData.append('_method', 'PUT')
+          response = await axios.post(`/api/${endpoint}/${this.editingItem.id}`, formData)
         } else {
           response = await axios.post(`/api/${endpoint}`, formData)
         }

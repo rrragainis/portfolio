@@ -44,13 +44,9 @@
         <div class="section programming" id="programming">
           <h2>{{ lang === 'lv' ? 'programmēšanas darbi:' : 'coding:' }}</h2>
           <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough to showcase, or I am allowed to showcase.' }}</p>
-          <div class="grid-container">
-            <div v-for="item in programmings" :key="item.id" class="grid-item" @click="showDetails('programming', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
-              <div class="grid-content">
-                <h3>{{ item[lang + '_name'] }}</h3>
-                <p>{{ item[lang + '_description'] }}</p>
-              </div>
+          <div class="card-grid">
+            <div v-for="item in programmings" :key="item.id" class="work-card" @click="showDetails('programming', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -63,13 +59,9 @@
               'I have been working with visual art for several years. I mainly work with tools like Photoshop and DaVinci Resolve, but I started creating in this direction by drawing and sketching my works. Here are some of my works to view.'
             }}
           </p>
-          <div class="grid-container">
-            <div v-for="item in photoshops" :key="item.id" class="grid-item" @click="showDetails('photoshop', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
-              <div class="grid-content">
-                <h3>{{ item[lang + '_name'] }}</h3>
-                <p>{{ item[lang + '_description'] }}</p>
-              </div>
+          <div class="card-grid">
+            <div v-for="item in photoshops" :key="item.id" class="work-card" @click="showDetails('photoshop', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -82,13 +74,9 @@
               'I have been playing instruments for over twelve years. I have learned to play guitar, bass, drums, piano, as well as singing and working with synthesizers. Starting from 2024, I also began recording other bands and writing music on commission. Here you can listen to some of the projects I have been involved in.'
             }}
           </p>
-          <div class="grid-container">
-            <div v-for="item in audios" :key="item.id" class="grid-item" @click="showDetails('audio', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
-              <div class="grid-content">
-                <h3>{{ item[lang + '_name'] }}</h3>
-                <p>{{ item[lang + '_description'] }}</p>
-              </div>
+          <div class="card-grid">
+            <div v-for="item in audios" :key="item.id" class="work-card" @click="showDetails('audio', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -315,53 +303,36 @@ export default {
   max-width: 900px;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
+  margin-top: 20px;
 }
 
-.grid-item {
-  background: #eaeaea;
-  border-radius: 8px;
+.card-grid.large {
+  gap: 20px;
+}
+
+.work-card {
+  width: 125px;
+  height: 125px;
+  background: #D9D9D9;
+  border-radius: 7px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
 }
 
-.grid-item:hover {
-  transform: translateY(-5px);
+.work-card:hover {
+  transform: scale(1.05);
 }
 
-.grid-image {
+.work-card-image {
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
-}
-
-.grid-content {
-  padding: 16px;
-}
-
-.grid-content h3 {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  color: #222;
-}
-
-.grid-content p {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
 }
 
 /* Contact section styling */
@@ -595,61 +566,26 @@ html {
   }
 
   .close-button {
-    top: 10px;
-    left: 10px;
+    top: 15px;
+    left: 15px;
   }
 
-  .audio-popup, .visual-popup, .programming-popup {
-    padding: 48px 20px 20px 20px;
+  .contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
-  .audio-album-art {
-    width: 150px;
-    height: 150px;
+  .contact-section h2 {
+    margin-bottom: 0;
   }
 
-  .audio-info {
-    font-size: 16px;
-  }
-
-  .audio-title {
-    font-size: 16px;
-  }
-
-  .audio-meta {
-    font-size: 14px;
-  }
-
-  .audio-description {
-    font-size: 14px;
-  }
-
-  .visual-name, .programming-name {
-    font-size: 16px;
-  }
-
-  .visual-description, .programming-description {
-    font-size: 14px;
-  }
-
-  .grid-item {
-    margin: 0;
-  }
-
-  .grid-image {
-    height: 150px;
-  }
-
-  .grid-content {
-    padding: 12px;
-  }
-
-  .grid-content h3 {
-    font-size: 16px;
-  }
-
-  .grid-content p {
-    font-size: 12px;
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 }
 </style>
