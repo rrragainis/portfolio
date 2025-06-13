@@ -439,16 +439,21 @@ export default {
 
         const endpoint = this.currentType === 'programming' ? 'programmings' : this.currentType === 'audio' ? 'audio' : this.currentType + 's'
         
+        let response
         if (this.editingItem) {
-          await axios.put(`/api/${endpoint}/${this.editingItem.id}`, formData)
+          response = await axios.put(`/api/${endpoint}/${this.editingItem.id}`, formData)
         } else {
-          await axios.post(`/api/${endpoint}`, formData)
+          response = await axios.post(`/api/${endpoint}`, formData)
         }
 
-        this.closeModal()
-        await this.loadData() // Reload data after successful update
+        if (response.status === 200 || response.status === 201) {
+          this.closeModal()
+          await this.loadData() // Reload data after successful update
+        } else {
+          throw new Error('Unexpected response status: ' + response.status)
+        }
       } catch (error) {
-        if (this.handleRateLimit(error.response)) {
+        if (error.response && this.handleRateLimit(error.response)) {
           alert(`Too many requests. Please wait ${this.retryAfter} seconds.`)
           return
         }

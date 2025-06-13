@@ -44,9 +44,13 @@
         <div class="section programming" id="programming">
           <h2>{{ lang === 'lv' ? 'programmēšanas darbi:' : 'coding:' }}</h2>
           <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough to showcase, or I am allowed to showcase.' }}</p>
-          <div class="card-grid">
-            <div v-for="item in programmings" :key="item.id" class="work-card" @click="showDetails('programming', item)">
-              <img :src="item.cropped_image" :alt="lang === 'lv' ? item.latvian_name : item.english_name" class="work-card-image">
+          <div class="grid-container">
+            <div v-for="item in programmings" :key="item.id" class="grid-item" @click="showDetails('programming', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
+              <div class="grid-content">
+                <h3>{{ item[lang + '_name'] }}</h3>
+                <p>{{ item[lang + '_description'] }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -59,9 +63,13 @@
               'I have been working with visual art for several years. I mainly work with tools like Photoshop and DaVinci Resolve, but I started creating in this direction by drawing and sketching my works. Here are some of my works to view.'
             }}
           </p>
-          <div class="card-grid large">
-            <div v-for="item in photoshops" :key="item.id" class="work-card" @click="showDetails('photoshop', item)">
-              <img :src="item.cropped_image" :alt="lang === 'lv' ? item.latvian_name : item.english_name" class="work-card-image">
+          <div class="grid-container">
+            <div v-for="item in photoshops" :key="item.id" class="grid-item" @click="showDetails('photoshop', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
+              <div class="grid-content">
+                <h3>{{ item[lang + '_name'] }}</h3>
+                <p>{{ item[lang + '_description'] }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -74,9 +82,13 @@
               'I have been playing instruments for over twelve years. I have learned to play guitar, bass, drums, piano, as well as singing and working with synthesizers. Starting from 2024, I also began recording other bands and writing music on commission. Here you can listen to some of the projects I have been involved in.'
             }}
           </p>
-          <div class="card-grid">
-            <div v-for="item in audios" :key="item.id" class="work-card" @click="showDetails('audio', item)">
-              <img :src="item.cropped_image" :alt="lang === 'lv' ? item.latvian_name : item.english_name" class="work-card-image">
+          <div class="grid-container">
+            <div v-for="item in audios" :key="item.id" class="grid-item" @click="showDetails('audio', item)">
+              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="grid-image">
+              <div class="grid-content">
+                <h3>{{ item[lang + '_name'] }}</h3>
+                <p>{{ item[lang + '_description'] }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -303,35 +315,53 @@ export default {
   max-width: 900px;
 }
 
-.card-grid {
-  display: flex;
-  flex-wrap: wrap;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  margin-top: 20px;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.card-grid.large {
-  gap: 20px;
-}
-
-.work-card {
-  width: 125px;
-  height: 125px;
-  background: #D9D9D9;
-  border-radius: 7px;
+.grid-item {
+  background: #eaeaea;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
-.work-card:hover {
-  transform: scale(1.05);
+.grid-item:hover {
+  transform: translateY(-5px);
 }
 
-.work-card-image {
+.grid-image {
   width: 100%;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
+}
+
+.grid-content {
+  padding: 16px;
+}
+
+.grid-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #222;
+}
+
+.grid-content p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Contact section styling */
@@ -366,17 +396,13 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
-.modal.audio-modal,
-.modal.visual-modal,
-.modal.programming-modal {
-  background: rgba(0, 0, 0, 0.8);
-}
+
 .modal-content {
   background: #eaeaea;
   box-shadow: 0 8px 32px rgba(0,0,0,0.25);
@@ -391,7 +417,9 @@ export default {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  margin: 20px;
 }
+
 .close-button {
   position: absolute;
   top: 20px;
@@ -405,6 +433,7 @@ export default {
   padding: 10px;
   margin: -10px;
 }
+
 /* AUDIO POPUP */
 .audio-popup {
   display: flex;
@@ -417,6 +446,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
 }
+
 .audio-row {
   display: flex;
   flex-direction: column;
@@ -424,12 +454,14 @@ export default {
   width: 100%;
   gap: 24px;
 }
+
 .audio-album-art {
   width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 4px;
 }
+
 .audio-info {
   display: flex;
   flex-direction: column;
@@ -441,15 +473,18 @@ export default {
   word-break: break-word;
   max-width: 100%;
 }
+
 .audio-title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 4px;
 }
+
 .audio-meta {
   font-size: 16px;
   margin-bottom: 2px;
 }
+
 .audio-description {
   margin-top: 24px;
   font-size: 16px;
@@ -458,11 +493,7 @@ export default {
   width: 100%;
   text-align: center;
 }
-.audio-player-bar {
-  width: 90%;
-  margin: 32px auto 0 auto;
-  display: block;
-}
+
 /* VISUAL & PROGRAMMING POPUP SHARED LAYOUT */
 .visual-popup, .programming-popup {
   display: flex;
@@ -475,12 +506,14 @@ export default {
   box-sizing: border-box;
   gap: 24px;
 }
+
 .visual-image, .programming-image {
   max-width: 100%;
   max-height: 60vh;
   object-fit: contain;
   border-radius: 4px;
 }
+
 .visual-content-row, .programming-content-row {
   display: flex;
   flex-direction: column;
@@ -489,17 +522,20 @@ export default {
   gap: 16px;
   width: 100%;
 }
+
 .visual-name, .programming-name {
   font-size: 18px;
   font-weight: bold;
   color: #222;
 }
+
 .visual-description, .programming-description {
   font-size: 16px;
   color: #222;
   word-break: break-word;
   width: 100%;
 }
+
 .lang-switch {
   margin-top: 0;
   font-family: 'PT Mono', monospace;
@@ -512,6 +548,7 @@ export default {
   user-select: none;
   transition: opacity 0.2s;
 }
+
 .lang-switch:hover {
   opacity: 0.7;
 }
@@ -554,6 +591,7 @@ html {
     max-width: 90vw;
     min-width: unset;
     margin: 20px;
+    max-height: 90vh;
   }
 
   .close-button {
@@ -592,6 +630,26 @@ html {
 
   .visual-description, .programming-description {
     font-size: 14px;
+  }
+
+  .grid-item {
+    margin: 0;
+  }
+
+  .grid-image {
+    height: 150px;
+  }
+
+  .grid-content {
+    padding: 12px;
+  }
+
+  .grid-content h3 {
+    font-size: 16px;
+  }
+
+  .grid-content p {
+    font-size: 12px;
   }
 }
 </style>
