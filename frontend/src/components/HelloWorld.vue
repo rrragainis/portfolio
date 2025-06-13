@@ -402,43 +402,44 @@ export default {
   font-size: 2rem;
   z-index: 2;
   cursor: pointer;
+  padding: 10px;
+  margin: -10px;
 }
 /* AUDIO POPUP */
 .audio-popup {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   background: transparent;
   border-radius: 4px;
   padding: 48px 40px 20px 56px;
-  gap: 0;
+  gap: 24px;
   width: 100%;
   box-sizing: border-box;
 }
 .audio-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   gap: 24px;
 }
 .audio-album-art {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 4px;
-  margin-right: 24px;
 }
 .audio-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  text-align: center;
   color: #222;
   font-family: 'PT Mono', monospace;
   font-size: 18px;
-  margin-top: 0;
   word-break: break-word;
-  max-width: 300px;
+  max-width: 100%;
 }
 .audio-title {
   font-size: 18px;
@@ -455,6 +456,7 @@ export default {
   color: #222;
   word-break: break-word;
   width: 100%;
+  text-align: center;
 }
 .audio-player-bar {
   width: 90%;
@@ -468,43 +470,35 @@ export default {
   align-items: center;
   background: #eaeaea;
   border-radius: 4px;
-  padding: 40px 40px 20px 40px;
+  padding: 48px 40px 20px 40px;
   width: 100%;
   box-sizing: border-box;
+  gap: 24px;
 }
 .visual-image, .programming-image {
-  max-width: 400px;
-  max-height: 300px;
+  max-width: 100%;
+  max-height: 60vh;
   object-fit: contain;
   border-radius: 4px;
-  margin-bottom: 24px;
-  align-self: center;
 }
 .visual-content-row, .programming-content-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
   width: 100%;
-  gap: 32px;
-  align-items: flex-start;
 }
 .visual-name, .programming-name {
-  flex: 1 1 30%;
-  font-family: 'PT Mono', monospace;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: bold;
   color: #222;
-  text-align: left;
-  word-break: break-word;
-  min-width: 0;
 }
 .visual-description, .programming-description {
-  flex: 2 1 70%;
-  font-family: 'PT Mono', monospace;
   font-size: 16px;
   color: #222;
-  text-align: left;
   word-break: break-word;
-  min-width: 0;
+  width: 100%;
 }
 .lang-switch {
   margin-top: 0;
@@ -553,5 +547,51 @@ export default {
 
 html {
   scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 90vw;
+    min-width: unset;
+    margin: 20px;
+  }
+
+  .close-button {
+    top: 10px;
+    left: 10px;
+  }
+
+  .audio-popup, .visual-popup, .programming-popup {
+    padding: 48px 20px 20px 20px;
+  }
+
+  .audio-album-art {
+    width: 150px;
+    height: 150px;
+  }
+
+  .audio-info {
+    font-size: 16px;
+  }
+
+  .audio-title {
+    font-size: 16px;
+  }
+
+  .audio-meta {
+    font-size: 14px;
+  }
+
+  .audio-description {
+    font-size: 14px;
+  }
+
+  .visual-name, .programming-name {
+    font-size: 16px;
+  }
+
+  .visual-description, .programming-description {
+    font-size: 14px;
+  }
 }
 </style>

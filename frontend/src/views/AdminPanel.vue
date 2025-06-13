@@ -422,11 +422,8 @@ export default {
         formData.append('latvian_description', sanitizedData.latvian_description)
         formData.append('english_description', sanitizedData.english_description)
         
-        // Handle image - if it's a new image (base64) or a new entry
-        if (!this.editingItem || (this.formData.imagePreview && this.formData.imagePreview.startsWith('data:'))) {
-          if (!this.formData.imagePreview || !this.formData.originalImage) {
-            throw new Error('Both original and cropped images are required')
-          }
+        // Handle image - only if a new image was selected
+        if (this.formData.imagePreview && this.formData.imagePreview.startsWith('data:')) {
           formData.append('cropped_image', this.formData.imagePreview)
           formData.append('original_image', this.formData.originalImage)
         }
@@ -449,7 +446,7 @@ export default {
         }
 
         this.closeModal()
-        this.loadData()
+        await this.loadData() // Reload data after successful update
       } catch (error) {
         if (this.handleRateLimit(error.response)) {
           alert(`Too many requests. Please wait ${this.retryAfter} seconds.`)

@@ -129,20 +129,32 @@ class AudioController extends Controller
                     }
                 }
 
-                // Save new cropped image
+                // Save new cropped image as WebP
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
-                $croppedImageName = 'audio_thumb_' . time() . '.jpg';
-                file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = url('uploads/' . $croppedImageName);
+                $croppedImageName = 'audio_thumb_' . time() . '.webp';
+                $croppedImagePath = $uploadPath . '/' . $croppedImageName;
                 
-                // Save new original image
+                // Convert to WebP
+                $image = imagecreatefromstring($croppedImageData);
+                imagewebp($image, $croppedImagePath, 80);
+                imagedestroy($image);
+                
+                $croppedImageUrl = url('uploads/' . $croppedImageName);
+                
+                // Save new original image as WebP
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
-                $originalImageName = 'audio_original_' . time() . '.jpg';
-                file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = url('uploads/' . $originalImageName);
+                $originalImageName = 'audio_original_' . time() . '.webp';
+                $originalImagePath = $uploadPath . '/' . $originalImageName;
                 
-                $validated['cropped_image'] = $croppedImagePath;
-                $validated['image_link'] = $originalImagePath;
+                // Convert to WebP
+                $image = imagecreatefromstring($originalImageData);
+                imagewebp($image, $originalImagePath, 80);
+                imagedestroy($image);
+                
+                $originalImageUrl = url('uploads/' . $originalImageName);
+                
+                $validated['cropped_image'] = $croppedImageUrl;
+                $validated['image_link'] = $originalImageUrl;
             } else {
                 unset($validated['cropped_image']);
                 unset($validated['original_image']);
