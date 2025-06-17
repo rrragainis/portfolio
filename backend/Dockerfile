@@ -3,44 +3,45 @@ FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    git \
+    curl \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     zip \
     unzip \
-    git \
-    curl \
-    sqlite3 \
-    libsqlite3-dev \
-    nginx
+    libjpeg-dev \
+    libfreetype6-dev \
+    libwebp-dev
 
-# Configure and install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-    pdo \
-    pdo_mysql \
-    mbstring \
-    exif \
-    pcntl \
-    bcmath \
-    gd \
-    pdo_sqlite
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy existing application directory
+COPY . .
+
+# Install dependencies
+RUN composer install
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www
+
+# Configure PHP upload limits
+RUN echo "upload_max_filesize=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
+RUN echo "post_max_size=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
 
 # Set working directory
 WORKDIR /var/www/html
-
-# Copy composer and install dependencies
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-COPY . /var/www/html
-RUN composer install --no-dev --optimize-autoloader
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Set PHP upload limits
-RUN echo "upload_max_filesize=50M\npost_max_size=50M" > /usr/local/etc/php/conf.d/uploads.ini
 
 # Create storage symlink
 RUN php artisan storage:link
