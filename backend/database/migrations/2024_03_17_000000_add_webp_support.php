@@ -1,37 +1,47 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class AddWebpSupport extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        // Add webp_image_link and webp_cropped_image columns to photoshops table
-        DB::statement('ALTER TABLE photoshops ADD COLUMN webp_image_link VARCHAR(255) AFTER image_link');
-        DB::statement('ALTER TABLE photoshops ADD COLUMN webp_cropped_image VARCHAR(255) AFTER cropped_image');
+        // Add columns to photoshops table
+        Schema::table('photoshops', function (Blueprint $table) {
+            $table->string('webp_image_link')->nullable();
+            $table->string('webp_cropped_image')->nullable();
+        });
 
-        // Add webp_image_link and webp_cropped_image columns to audio table
-        DB::statement('ALTER TABLE audio ADD COLUMN webp_image_link VARCHAR(255) AFTER image_link');
-        DB::statement('ALTER TABLE audio ADD COLUMN webp_cropped_image VARCHAR(255) AFTER cropped_image');
+        // Add columns to audio table
+        Schema::table('audio', function (Blueprint $table) {
+            $table->string('webp_image_link')->nullable();
+            $table->string('webp_cropped_image')->nullable();
+        });
 
-        // Add webp_image_link and webp_cropped_image columns to programmings table
-        DB::statement('ALTER TABLE programmings ADD COLUMN webp_image_link VARCHAR(255) AFTER image_link');
-        DB::statement('ALTER TABLE programmings ADD COLUMN webp_cropped_image VARCHAR(255) AFTER cropped_image');
+        // Add columns to programmings table
+        Schema::table('programmings', function (Blueprint $table) {
+            $table->string('webp_image_link')->nullable();
+            $table->string('webp_cropped_image')->nullable();
+        });
     }
 
     public function down()
     {
-        // Remove webp columns from photoshops table
-        DB::statement('ALTER TABLE photoshops DROP COLUMN webp_image_link');
-        DB::statement('ALTER TABLE photoshops DROP COLUMN webp_cropped_image');
+        // Remove columns from photoshops table
+        Schema::table('photoshops', function (Blueprint $table) {
+            $table->dropColumn(['webp_image_link', 'webp_cropped_image']);
+        });
 
-        // Remove webp columns from audio table
-        DB::statement('ALTER TABLE audio DROP COLUMN webp_image_link');
-        DB::statement('ALTER TABLE audio DROP COLUMN webp_cropped_image');
+        // Remove columns from audio table
+        Schema::table('audio', function (Blueprint $table) {
+            $table->dropColumn(['webp_image_link', 'webp_cropped_image']);
+        });
 
-        // Remove webp columns from programmings table
-        DB::statement('ALTER TABLE programmings DROP COLUMN webp_image_link');
-        DB::statement('ALTER TABLE programmings DROP COLUMN webp_cropped_image');
+        // Remove columns from programmings table
+        Schema::table('programmings', function (Blueprint $table) {
+            $table->dropColumn(['webp_image_link', 'webp_cropped_image']);
+        });
     }
-} 
+}; 
