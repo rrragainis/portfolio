@@ -25,7 +25,7 @@ RUN docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 # Copy existing application directory
 COPY . .
@@ -34,14 +34,11 @@ COPY . .
 RUN composer install
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www/html
 
 # Configure PHP upload limits
 RUN echo "upload_max_filesize=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
 RUN echo "post_max_size=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
-
-# Set working directory
-WORKDIR /var/www/html
 
 # Create storage symlink
 RUN php artisan storage:link
