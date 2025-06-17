@@ -18,6 +18,16 @@ use App\Http\Controllers\ProgrammingPictureController;
 |
 */
 
+// Handle OPTIONS requests for all API routes
+Route::options('{any}', function () {
+    return response('', 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-TOKEN')
+        ->header('Access-Control-Allow-Credentials', 'true')
+        ->header('Access-Control-Max-Age', '1728000');
+})->where('any', '.*');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
