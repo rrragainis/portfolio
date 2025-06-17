@@ -20,24 +20,10 @@
         <div class="section about-me" id="about-me">
           <h2>{{ lang === 'lv' ? 'par mani' : 'about me' }}</h2>
           <p v-if="lang === 'lv'">
-            Mani sauc Ģirts. Jau vairākus gadus man interesē viss, kas ir saistīts ar mūziku un jebkāda cita veida kultūru.
-            Pašlaik cenšos pārvērst savu mīlestību pret mākslu un radošumu par karjeru.
-            Jau labu laiku nodarbojos ar muzicēšanu un mākslu. Ikdienā izmantoju rīkus kā Reaper audio
-            apstrādei un ierakstīšanai, kā arī Photoshop un DaVinci vizuālo mēdiju apstrādei.
-            Vēl arī es programmēju! Es programmēju izmantojot valodas kā:
-            Vue.js; Next.js; Laravel; MySQL; PostgreSQL; C++; JUCE; Python; PHP.
-            Pārsvarā visus dizainus mājaslapām radu aplikācijā Figma.
-            Esmu bijis praksē SIA "All Media Group" priekš TV3 un esmu pašlaik praksē Rīgas Valsts tehnikumā.
+            Mani sauc Ģirts, un jau vairākus gadus aizraujos ar mūziku, mākslu un kultūru kopumā. Šī aizraušanās ar radošumu ir kļuvusi par manu virzītājspēku, un pašlaik aktīvi strādāju, lai to pārvērstu par veiksmīgu profesionālo karjeru. Ikdienā nodarbojos ar muzicēšanu un vizuālo mākslu. Skaņas apstrādei un ierakstīšanai izmantoju Reaper, bet vizuālo materiālu apstrādei  Adobe Photoshop un DaVinci Resolve. Papildus tam arī programmēju. Programmējot izmantoju vairākas valodas: Vue.js, Next.js, Laravel, MySQL, PostgreSQL, C++, JUCE, Python un PHP. Mājaslapu dizainu veidošanai izmantoju Figma. Esmu bijis praksē SIA "All Media Group" priekš TV3 un Rīgas Valsts tehnikumā.
           </p>
           <p v-else>
-            My name is Ģirts. For several years, I have been interested in everything related to music and all kinds of culture.
-            Currently, I am trying to turn my love for art and creativity into a career.
-            For a long time, I have been involved in music and art. On a daily basis, I use tools like Reaper for audio
-            editing and recording, as well as Photoshop and DaVinci for visual media editing.
-            I also program! I use languages like:
-            Vue.js; Next.js; Laravel; MySQL; PostgreSQL; C++; JUCE; Python; PHP.
-            I mostly design websites in Figma.
-            I have interned at SIA "All Media Group" for TV3 and am currently interning at Riga State Technical School.
+            My name is Ģirts and I have been passionate about music, art and culture in general for several years. This passion for creativity has become my driving force and I am now actively working to turn it into a successful professional career. I use Reaper when working with audio, and Adobe Photoshop and DaVinci Resolve for visuals. In addition, I also code. I use several programming languages: Vue.js, Next.js, Laravel, MySQL, PostgreSQL, C++, JUCE, Python and PHP. I use Figma for website design. I have interned at SIA "All Media Group" for TV3 and Riga State Technical School.
           </p>
         </div>
 
