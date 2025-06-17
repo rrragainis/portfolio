@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-screen" v-if="isLoading">
+  <div v-if="isLoading" class="loading-screen">
     <div class="loading-content">
       <div class="loading-text">Loading...</div>
       <div class="loading-percentage">{{ loadingPercentage }}%</div>
@@ -24,13 +24,15 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap');
+
 .loading-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: #000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +41,8 @@ export default {
 
 .loading-content {
   text-align: center;
-  color: white;
+  color: #fff;
+  font-family: 'PT Mono', monospace;
 }
 
 .loading-text {

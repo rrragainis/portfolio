@@ -205,10 +205,6 @@ export default {
         this.audios = audioRes.data;
         this.programmings = programmingRes.data;
 
-        // Calculate total items to preload
-        const totalItems = this.photoshops.length + this.audios.length + this.programmings.length;
-        let loadedItems = 0;
-
         // Preload images
         const preloadPromises = [];
 
@@ -236,8 +232,7 @@ export default {
         // Track loading progress
         for (const promise of preloadPromises) {
           await promise;
-          loadedItems++;
-          this.loadingPercentage = Math.round((loadedItems / preloadPromises.length) * 100);
+          this.loadingPercentage = Math.round((preloadPromises.indexOf(promise) + 1) / preloadPromises.length * 100);
         }
 
         this.isLoading = false;
