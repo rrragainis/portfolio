@@ -304,10 +304,21 @@ export default {
     formatDescription(text) {
       if (!text) return '';
       
-      // Replace ```text``` with clickable links
-      return text.replace(/```([^`]+)```/g, (match, url) => {
-        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+      // First replace <break> with <br>
+      let formattedText = text.replace(/<break>/g, '<br>');
+      
+      // Then replace ```text``` with clickable links
+      formattedText = formattedText.replace(/```([^`]+)```/g, (match, url) => {
+        // Extract the display text from the URL if it's a GitHub repo
+        let displayText = url;
+        if (url.includes('github.com')) {
+          const parts = url.split('/');
+          displayText = parts[parts.length - 1];
+        }
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayText}</a>`;
       });
+      
+      return formattedText;
     }
   }
 }
