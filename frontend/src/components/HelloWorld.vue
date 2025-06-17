@@ -304,8 +304,8 @@ export default {
     formatDescription(text) {
       if (!text) return '';
       
-      // First replace <break> with <br>
-      let formattedText = text.replace(/<break>/g, '<br>');
+      // First preserve line breaks from text input
+      let formattedText = text.replace(/\n/g, '<br>');
       
       // Then replace ```text``` with clickable links
       formattedText = formattedText.replace(/```([^`]+)```/g, (match, url) => {
