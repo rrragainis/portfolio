@@ -389,11 +389,13 @@ export default {
   align-items: center;
   padding: 20px;
   background-color: #f5f5f5;
+  width: 100%;
 }
 
 .bottom-section h2 {
   margin-bottom: 20px;
   text-align: center;
+  order: 1;
 }
 
 .contact-info {
@@ -401,12 +403,16 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 15px;
+  order: 2;
+  width: 100%;
 }
 
 .contact-info a {
   color: #333;
   text-decoration: none;
   font-size: 16px;
+  display: block;
+  text-align: center;
 }
 
 .contact-info a:hover {
