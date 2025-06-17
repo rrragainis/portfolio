@@ -19,7 +19,7 @@
                 <div v-for="item in photoshops" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getImageUrl(item.cropped_image)" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -47,7 +47,7 @@
                 <div v-for="item in audio" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getImageUrl(item.cropped_image)" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -75,7 +75,7 @@
                 <div v-for="item in programmings" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getImageUrl(item.cropped_image)" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -496,6 +496,25 @@ export default {
       if (this.currentImageIndex < this.galleryImages.length - 1) {
         this.currentImageIndex++
       }
+    },
+    getWebpImage(imageUrl) {
+      if (!imageUrl) return '';
+      
+      // If the image is already a WebP, return it
+      if (imageUrl.endsWith('.webp')) {
+        return imageUrl;
+      }
+      
+      // If the image is a data URL, return it as is
+      if (imageUrl.startsWith('data:')) {
+        return imageUrl;
+      }
+      
+      // Convert the image URL to WebP
+      const webpUrl = imageUrl.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      
+      // Check if WebP version exists, if not, fall back to original
+      return webpUrl;
     }
   }
 }

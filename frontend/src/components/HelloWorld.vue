@@ -46,7 +46,7 @@
           <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough to showcase, or I am allowed to showcase.' }}</p>
           <div class="card-grid">
             <div v-for="item in programmings" :key="item.id" class="work-card" @click="showDetails('programming', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
           </p>
           <div class="card-grid">
             <div v-for="item in photoshops" :key="item.id" class="work-card" @click="showDetails('photoshop', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
           </p>
           <div class="card-grid">
             <div v-for="item in audios" :key="item.id" class="work-card" @click="showDetails('audio', item)">
-              <img :src="item.cropped_image" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
             <div class="audio-row">
               <a :href="selectedItem?.image_link" target="_blank" rel="noopener noreferrer">
                 <img
-                  :src="selectedItem?.cropped_image"
+                  :src="getWebpImage(selectedItem?.cropped_image)"
                   :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
                   class="audio-album-art"
                 />
@@ -137,7 +137,7 @@
           <div class="visual-popup">
             <a :href="selectedItem?.image_link || selectedItem?.cropped_image" target="_blank" rel="noopener noreferrer">
               <img
-                :src="selectedItem?.image_link || selectedItem?.cropped_image"
+                :src="getWebpImage(selectedItem?.image_link || selectedItem?.cropped_image)"
                 :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
                 class="visual-image"
               />
@@ -153,7 +153,7 @@
           <div class="programming-popup">
             <a :href="selectedItem?.image_link" target="_blank" rel="noopener noreferrer">
               <img
-                :src="selectedItem?.image_link"
+                :src="getWebpImage(selectedItem?.image_link)"
                 :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
                 class="programming-image"
               />
@@ -176,13 +176,13 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
+      lang: 'lv',
       photoshops: [],
       audios: [],
       programmings: [],
       showModal: false,
-      selectedItem: null,
       selectedType: null,
-      lang: 'lv',
+      selectedItem: null
     }
   },
   mounted() {
@@ -218,6 +218,25 @@ export default {
     closeModal() {
       this.showModal = false
       this.selectedItem = null
+    },
+    getWebpImage(imageUrl) {
+      if (!imageUrl) return '';
+      
+      // If the image is already a WebP, return it
+      if (imageUrl.endsWith('.webp')) {
+        return imageUrl;
+      }
+      
+      // If the image is a data URL, return it as is
+      if (imageUrl.startsWith('data:')) {
+        return imageUrl;
+      }
+      
+      // Convert the image URL to WebP
+      const webpUrl = imageUrl.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+      
+      // Check if WebP version exists, if not, fall back to original
+      return webpUrl;
     }
   }
 }

@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Photoshop;
 use Illuminate\Http\Request;
+use App\Services\ImageService;
 
 class PhotoshopController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     public function index()
     {
         return response()->json(Photoshop::all());
@@ -35,17 +43,27 @@ class PhotoshopController extends Controller
                 // Save cropped image
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
                 $croppedImageName = 'photoshop_thumb_' . time() . '.jpg';
-                file_put_contents($uploadPath . '/' . $croppedImageName, $croppedImageData);
-                $croppedImagePath = url('uploads/' . $croppedImageName);
+                $croppedImagePath = $uploadPath . '/' . $croppedImageName;
+                file_put_contents($croppedImagePath, $croppedImageData);
+                
+                // Convert to WebP
+                $webpCroppedPath = $this->imageService->convertToWebP($croppedImagePath);
+                $croppedImageUrl = url('uploads/' . basename($webpCroppedPath));
                 
                 // Save original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
                 $originalImageName = 'photoshop_original_' . time() . '.jpg';
-                file_put_contents($uploadPath . '/' . $originalImageName, $originalImageData);
-                $originalImagePath = url('uploads/' . $originalImageName);
+                $originalImagePath = $uploadPath . '/' . $originalImageName;
+                file_put_contents($originalImagePath, $originalImageData);
                 
-                $validated['cropped_image'] = $croppedImagePath;
-                $validated['image_link'] = $originalImagePath;
+                // Convert to WebP
+                $webpOriginalPath = $this->imageService->convertToWebP($originalImagePath);
+                $originalImageUrl = url('uploads/' . basename($webpOriginalPath));
+                
+                $validated['cropped_image'] = $croppedImageUrl;
+                $validated['image_link'] = $originalImageUrl;
+                $validated['webp_cropped_image'] = $croppedImageUrl;
+                $validated['webp_image_link'] = $originalImageUrl;
             } else {
                 throw new \Exception('Invalid image data format');
             }
@@ -103,24 +121,28 @@ class PhotoshopController extends Controller
 
                 // Save new cropped image
                 $croppedImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['cropped_image']));
-                $croppedImageName = 'photoshop_thumb_' . time() . '.webp';
+                $croppedImageName = 'photoshop_thumb_' . time() . '.jpg';
                 $croppedImagePath = $uploadPath . '/' . $croppedImageName;
-                
-                // Save the image directly without conversion
                 file_put_contents($croppedImagePath, $croppedImageData);
-                $croppedImageUrl = url('uploads/' . $croppedImageName);
+                
+                // Convert to WebP
+                $webpCroppedPath = $this->imageService->convertToWebP($croppedImagePath);
+                $croppedImageUrl = url('uploads/' . basename($webpCroppedPath));
                 
                 // Save new original image
                 $originalImageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $validated['original_image']));
-                $originalImageName = 'photoshop_original_' . time() . '.webp';
+                $originalImageName = 'photoshop_original_' . time() . '.jpg';
                 $originalImagePath = $uploadPath . '/' . $originalImageName;
-                
-                // Save the image directly without conversion
                 file_put_contents($originalImagePath, $originalImageData);
-                $originalImageUrl = url('uploads/' . $originalImageName);
+                
+                // Convert to WebP
+                $webpOriginalPath = $this->imageService->convertToWebP($originalImagePath);
+                $originalImageUrl = url('uploads/' . basename($webpOriginalPath));
                 
                 $validated['cropped_image'] = $croppedImageUrl;
                 $validated['image_link'] = $originalImageUrl;
+                $validated['webp_cropped_image'] = $croppedImageUrl;
+                $validated['webp_image_link'] = $originalImageUrl;
             } else {
                 unset($validated['cropped_image']);
                 unset($validated['original_image']);
