@@ -1,5 +1,9 @@
 <template>
   <div class="main-space">
+    <LoadingScreen 
+      :isLoading="isLoading" 
+      :loadingPercentage="loadingPercentage" 
+    />
     <section class="top-section">
       <div class="main-pic-1"></div>
       <div class="top-text-and-pic">
@@ -157,9 +161,13 @@
 
 <script>
 import axios from 'axios'
+import LoadingScreen from './LoadingScreen.vue'
 
 export default {
   name: 'HelloWorld',
+  components: {
+    LoadingScreen
+  },
   data() {
     return {
       lang: 'lv',
@@ -168,7 +176,11 @@ export default {
       programmings: [],
       showModal: false,
       selectedType: null,
-      selectedItem: null
+      selectedItem: null,
+      isLoading: true,
+      loadingPercentage: 0,
+      preloadedImages: new Map(),
+      preloadedAudio: new Map()
     }
   },
   mounted() {
@@ -180,30 +192,100 @@ export default {
     },
     async loadData() {
       try {
+        this.isLoading = true;
+        this.loadingPercentage = 0;
+
         const [photoshopRes, audioRes, programmingRes] = await Promise.all([
           axios.get('/api/photoshops'),
           axios.get('/api/audio'),
           axios.get('/api/programmings')
-        ])
-        console.log('Photoshop data:', photoshopRes.data)
-        console.log('Audio data:', audioRes.data)
-        console.log('Programming data:', programmingRes.data)
-        
-        this.photoshops = photoshopRes.data
-        this.audios = audioRes.data
-        this.programmings = programmingRes.data
+        ]);
+
+        this.photoshops = photoshopRes.data;
+        this.audios = audioRes.data;
+        this.programmings = programmingRes.data;
+
+        // Calculate total items to preload
+        const totalItems = this.photoshops.length + this.audios.length + this.programmings.length;
+        let loadedItems = 0;
+
+        // Preload images
+        const preloadPromises = [];
+
+        // Preload photoshop images
+        this.photoshops.forEach(item => {
+          preloadPromises.push(this.preloadImage(item.cropped_image));
+          preloadPromises.push(this.preloadImage(item.image_link));
+        });
+
+        // Preload programming images
+        this.programmings.forEach(item => {
+          preloadPromises.push(this.preloadImage(item.cropped_image));
+          preloadPromises.push(this.preloadImage(item.image_link));
+        });
+
+        // Preload audio images and files
+        this.audios.forEach(item => {
+          preloadPromises.push(this.preloadImage(item.cropped_image));
+          preloadPromises.push(this.preloadImage(item.image_link));
+          if (item.mp3_file) {
+            preloadPromises.push(this.preloadAudio(item.mp3_file));
+          }
+        });
+
+        // Track loading progress
+        for (const promise of preloadPromises) {
+          await promise;
+          loadedItems++;
+          this.loadingPercentage = Math.round((loadedItems / preloadPromises.length) * 100);
+        }
+
+        this.isLoading = false;
       } catch (error) {
-        console.error('Error loading data:', error)
+        console.error('Error loading data:', error);
+        this.isLoading = false;
       }
     },
+    preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        if (this.preloadedImages.has(url)) {
+          resolve();
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          this.preloadedImages.set(url, img);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = this.getWebpImage(url);
+      });
+    },
+    preloadAudio(url) {
+      return new Promise((resolve, reject) => {
+        if (this.preloadedAudio.has(url)) {
+          resolve();
+          return;
+        }
+
+        const audio = new Audio();
+        audio.oncanplaythrough = () => {
+          this.preloadedAudio.set(url, audio);
+          resolve();
+        };
+        audio.onerror = reject;
+        audio.src = url;
+      });
+    },
     showDetails(type, item) {
-      this.selectedItem = item
-      this.selectedType = type
-      this.showModal = true
+      this.selectedItem = item;
+      this.selectedType = type;
+      this.showModal = true;
     },
     closeModal() {
-      this.showModal = false
-      this.selectedItem = null
+      this.showModal = false;
+      this.selectedItem = null;
     },
     getWebpImage(imageUrl) {
       if (!imageUrl) return '';
@@ -223,6 +305,14 @@ export default {
       
       // Check if WebP version exists, if not, fall back to original
       return webpUrl;
+    },
+    formatDescription(text) {
+      if (!text) return '';
+      
+      // Replace ```text``` with clickable links
+      return text.replace(/```([^`]+)```/g, (match, url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+      });
     }
   }
 }
@@ -606,5 +696,16 @@ html {
     gap: 10px;
     order: 2;
   }
+}
+
+/* Add styles for clickable links */
+a {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #0056b3;
 }
 </style>
