@@ -1,7 +1,7 @@
 <template>
   <div v-if="isLoading" class="loading-screen">
     <div class="loading-content">
-      <div class="loading-text">Loading...</div>
+      <div class="loading-text">loading...</div>
       <div class="loading-percentage">{{ loadingPercentage }}%</div>
     </div>
   </div>
@@ -53,5 +53,6 @@ export default {
 .loading-percentage {
   font-size: 48px;
   font-weight: bold;
+  font-family: 'PT Mono', monospace;
 }
 </style> 
