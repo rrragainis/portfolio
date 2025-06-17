@@ -714,4 +714,15 @@ a {
 a:hover {
   color: #0056b3;
 }
+
+.description {
+  white-space: pre-wrap;
+}
+
+.modal-info p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
 </style>
