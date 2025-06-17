@@ -2,16 +2,24 @@
 
 namespace App\Services;
 
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ImageService
 {
+    protected $manager;
+
+    public function __construct()
+    {
+        $this->manager = new ImageManager(new Driver());
+    }
+
     public function convertToWebP($imagePath, $quality = 80)
     {
-        $image = Image::make($imagePath);
+        $image = $this->manager->read($imagePath);
         $webpPath = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $imagePath);
         
-        $image->encode('webp', $quality)->save($webpPath);
+        $image->toWebp($quality)->save($webpPath);
         
         return $webpPath;
     }
