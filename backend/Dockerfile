@@ -37,11 +37,11 @@ RUN composer install
 RUN chown -R www-data:www-data /var/www/html
 
 # Configure PHP settings
-RUN echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/docker-php-memory-limit.ini
-RUN echo "upload_max_filesize=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
-RUN echo "post_max_size=50M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
-RUN echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
-RUN echo "max_input_time=300" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
+RUN echo "memory_limit=1024M" >> /usr/local/etc/php/conf.d/docker-php-memory-limit.ini
+RUN echo "upload_max_filesize=1024M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
+RUN echo "post_max_size=1024M" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
+RUN echo "max_execution_time=600" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
+RUN echo "max_input_time=600" >> /usr/local/etc/php/conf.d/docker-php-upload-limit.ini
 
 # Create storage symlink
 RUN php artisan storage:link
