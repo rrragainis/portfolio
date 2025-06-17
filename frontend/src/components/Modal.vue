@@ -1,22 +1,26 @@
 <template>
-  <div v-if="show" class="modal-overlay" @click="close">
-    <div class="modal-content" :class="{ 'exploding': isExploding }" @click.stop>
-      <button class="close-button" @click="close">&times;</button>
-      <div class="modal-body">
-        <img :src="getWebpImage(item.image_link)" :alt="item.title" class="modal-image">
-        <div class="modal-info">
-          <h2>{{ item.title }}</h2>
-          <p v-html="formatDescription(item.description)"></p>
-          <div v-if="type === 'audio' && item.mp3_file" class="audio-player">
-            <audio controls>
-              <source :src="item.mp3_file" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
+  <Transition name="fade">
+    <div v-if="show" class="modal-overlay" @click="close">
+      <Transition name="slide-up">
+        <div v-if="show" class="modal-content" :class="{ 'exploding': isExploding }" @click.stop>
+          <button class="close-button" @click="close">&times;</button>
+          <div class="modal-body">
+            <img :src="getWebpImage(item.image_link)" :alt="item.title" class="modal-image">
+            <div class="modal-info">
+              <h2>{{ item.title }}</h2>
+              <p v-html="formatDescription(item.description)"></p>
+              <div v-if="type === 'audio' && item.mp3_file" class="audio-player">
+                <audio controls>
+                  <source :src="item.mp3_file" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </Transition>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script>
@@ -47,31 +51,24 @@ export default {
       setTimeout(() => {
         this.$emit('close');
         this.isExploding = false;
-      }, 500); // Match the explosion animation duration
+      }, 500);
     },
     getWebpImage(imageUrl) {
       if (!imageUrl) return '';
       
-      // If the image is already a WebP, return it
       if (imageUrl.endsWith('.webp')) {
         return imageUrl;
       }
       
-      // If the image is a data URL, return it as is
       if (imageUrl.startsWith('data:')) {
         return imageUrl;
       }
       
-      // Convert the image URL to WebP
       const webpUrl = imageUrl.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-      
-      // Check if WebP version exists, if not, fall back to original
       return webpUrl;
     },
     formatDescription(text) {
       if (!text) return '';
-      
-      // Replace ```text``` with clickable links
       return text.replace(/```([^`]+)```/g, (match, url) => {
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
       });
@@ -92,7 +89,6 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease forwards;
 }
 
 .modal-content {
@@ -103,12 +99,6 @@ export default {
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  transform: translateY(100%);
-  animation: slideUp 0.3s ease forwards;
-}
-
-.modal-content.exploding {
-  animation: explode 0.5s ease-out forwards;
 }
 
 .close-button {
@@ -158,22 +148,39 @@ export default {
   width: 100%;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Slide up transition */
+.slide-up-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-leave-active {
+  transition: all 0.5s ease-in;
+}
+
+.slide-up-enter-from {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.slide-up-leave-to {
+  transform: translateY(100%) scale(0.2);
+  opacity: 0;
+}
+
+/* Explosion animation */
+.exploding {
+  animation: explode 0.5s ease-out forwards;
 }
 
 @keyframes explode {
