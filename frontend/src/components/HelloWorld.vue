@@ -304,8 +304,8 @@ export default {
     formatDescription(text) {
       if (!text) return '';
       
-      // First preserve line breaks from text input
-      let formattedText = text.replace(/\n/g, '<br>');
+      // First replace the special line break sequence with <br>
+      let formattedText = text.replace(/\\n/g, '<br>');
       
       // Then replace ```text``` with clickable links
       formattedText = formattedText.replace(/```([^`]+)```/g, (match, url) => {
@@ -384,9 +384,33 @@ export default {
 }
 
 .bottom-section {
-  padding: 60px;
-  max-width: 1086px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.bottom-section h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.contact-info a {
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.contact-info a:hover {
+  color: #007bff;
 }
 
 .section {
@@ -701,6 +725,20 @@ html {
     align-items: center;
     gap: 10px;
     order: 2;
+  }
+
+  .bottom-section {
+    padding: 15px;
+  }
+
+  .contact-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .contact-info a {
+    display: block;
+    margin: 5px 0;
   }
 }
 
