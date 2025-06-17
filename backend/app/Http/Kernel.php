@@ -26,6 +26,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            \Fruitcake\Cors\HandleCors::class,
             \App\Http\Middleware\CustomRateLimiter::class.':60,1',
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
