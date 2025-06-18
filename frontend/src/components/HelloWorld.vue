@@ -56,8 +56,8 @@
           <h2>{{ lang === 'lv' ? 'audio' : 'audio' }}</h2>
           <p>
             {{ lang === 'lv' ? 
-              'Nodarbojos ar instrumentspēli jau pāri divpadsmit gadiem. Esmu apguvis, kā spēlēt ģitāru, basģitāru, bungas, klavieres, kā arī dziedāt un apieties ar sintezatoriem. Sākot no 2024. gada, arī sāku ierakstīt pats citas grupas un rakstīt mūziku pēc pasūtījuma. Šeit var noklausīties pāris no projektiem kuros esmu piedalījies.' :
-              'I have been playing instruments for over twelve years. I have learned to play guitar, bass, drums, piano, as well as singing and working with synthesizers. Starting from 2024, I also began recording other bands and writing music on commission. Here you can listen to some of the projects I have been involved in.'
+              'Nodarbojos ar instrumentspēli jau pāri divpadsmit gadiem. Esmu apguvis, kā spēlēt ģitāru, basģitāru, bungas, klavieres, kā arī dziedāt un apieties ar sintezatoriem. Esmu veidojis arī skaņu celiņus reklāmām televīzijā. Sākot no 2024. gada, arī sāku ierakstīt pats citas grupas un rakstīt mūziku pēc pasūtījuma. Šeit var noklausīties pāris no projektiem kuros esmu piedalījies.' :
+              'I have been playing instruments for over twelve years. I have learned to play guitar, bass, drums, piano, as well as singing and working with synthesizers. I have also worked on sound for advertisement on local tv. Starting from 2024, I also began recording other bands and writing music on commission. Here you can listen to some of the projects I have been involved in.'
             }}
           </p>
           <div class="card-grid">
