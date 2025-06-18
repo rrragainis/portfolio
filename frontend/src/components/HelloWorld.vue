@@ -69,8 +69,8 @@
 
         <div class="section contacts">
           <div class="contact-row">
-            <p class="contact-email">rrragainis@gmail.com</p>
             <h2>{{ lang === 'lv' ? 'sazinies ar mani' : 'contact me' }}</h2>
+            <p class="contact-email">rrragainis@gmail.com</p>
             <a href="https://www.instagram.com/rrragainis/" target="_blank" rel="noopener noreferrer" class="contact-instagram">
               instagram
             </a>
@@ -384,7 +384,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: transparent;
   width: 100%;
 }
 
@@ -465,10 +465,9 @@ export default {
 /* Contact section styling */
 .contact-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   gap: 20px;
-  flex-wrap: wrap;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -476,15 +475,22 @@ export default {
 .contact-row h2 {
   font-size: 24px;
   margin: 0;
-  flex: 1;
   text-align: center;
+  order: 1;
 }
 
 .contact-row p, .contact-row a {
   margin: 0;
   font-size: 16px;
-  flex: 1;
   text-align: center;
+}
+
+.contact-email {
+  order: 2;
+}
+
+.contact-instagram {
+  order: 3;
 }
 
 /* Modal styling */
