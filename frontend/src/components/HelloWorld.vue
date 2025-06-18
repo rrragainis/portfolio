@@ -1,9 +1,5 @@
 <template>
   <div class="main-space">
-    <LoadingScreen 
-      :isLoading="isLoading" 
-      :loadingPercentage="loadingPercentage" 
-    />
     <section class="top-section">
       <div class="main-pic-1"></div>
       <div class="top-text-and-pic">
@@ -113,7 +109,7 @@
                 <div class="audio-meta">{{ selectedItem?.year }}</div>
               </div>
             </div>
-            <div class="audio-description">{{ lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description }}</div>
+            <div class="audio-description" v-html="formatDescription(lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description)"></div>
           </div>
           <audio
             v-if="selectedItem?.mp3_file"
@@ -134,7 +130,7 @@
             </a>
             <div class="visual-content-row">
               <div class="visual-name">{{ lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name }}</div>
-              <div class="visual-description">{{ lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description }}</div>
+              <div class="visual-description" v-html="formatDescription(lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description)"></div>
             </div>
           </div>
         </template>
@@ -150,7 +146,7 @@
             </a>
             <div class="programming-content-row">
               <div class="programming-name">{{ lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name }}</div>
-              <div class="programming-description">{{ lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description }}</div>
+              <div class="programming-description" v-html="formatDescription(lang === 'lv' ? selectedItem?.latvian_description : selectedItem?.english_description)"></div>
             </div>
           </div>
         </template>
@@ -161,13 +157,9 @@
 
 <script>
 import axios from 'axios'
-import LoadingScreen from './LoadingScreen.vue'
 
 export default {
   name: 'HelloWorld',
-  components: {
-    LoadingScreen
-  },
   data() {
     return {
       lang: 'lv',
@@ -177,10 +169,9 @@ export default {
       showModal: false,
       selectedType: null,
       selectedItem: null,
-      isLoading: true,
-      loadingPercentage: 0,
       preloadedImages: new Map(),
-      preloadedAudio: new Map()
+      preloadedAudio: new Map(),
+      dataLoaded: false
     }
   },
   mounted() {
@@ -192,9 +183,7 @@ export default {
     },
     async loadData() {
       try {
-        this.isLoading = true;
-        this.loadingPercentage = 0;
-
+        // Load data immediately but don't block the UI
         const [photoshopRes, audioRes, programmingRes] = await Promise.all([
           axios.get('/api/photoshops'),
           axios.get('/api/audio'),
@@ -204,42 +193,42 @@ export default {
         this.photoshops = photoshopRes.data;
         this.audios = audioRes.data;
         this.programmings = programmingRes.data;
+        this.dataLoaded = true;
 
-        // Preload images
-        const preloadPromises = [];
-
-        // Preload photoshop images
-        this.photoshops.forEach(item => {
-          preloadPromises.push(this.preloadImage(item.cropped_image));
-          preloadPromises.push(this.preloadImage(item.image_link));
-        });
-
-        // Preload programming images
-        this.programmings.forEach(item => {
-          preloadPromises.push(this.preloadImage(item.cropped_image));
-          preloadPromises.push(this.preloadImage(item.image_link));
-        });
-
-        // Preload audio images and files
-        this.audios.forEach(item => {
-          preloadPromises.push(this.preloadImage(item.cropped_image));
-          preloadPromises.push(this.preloadImage(item.image_link));
-          if (item.mp3_file) {
-            preloadPromises.push(this.preloadAudio(item.mp3_file));
-          }
-        });
-
-        // Track loading progress
-        for (const promise of preloadPromises) {
-          await promise;
-          this.loadingPercentage = Math.round((preloadPromises.indexOf(promise) + 1) / preloadPromises.length * 100);
-        }
-
-        this.isLoading = false;
+        // Preload images and audio in the background
+        this.preloadAssets();
       } catch (error) {
         console.error('Error loading data:', error);
-        this.isLoading = false;
       }
+    },
+    async preloadAssets() {
+      const preloadPromises = [];
+
+      // Preload photoshop images
+      this.photoshops.forEach(item => {
+        preloadPromises.push(this.preloadImage(item.cropped_image));
+        preloadPromises.push(this.preloadImage(item.image_link));
+      });
+
+      // Preload programming images
+      this.programmings.forEach(item => {
+        preloadPromises.push(this.preloadImage(item.cropped_image));
+        preloadPromises.push(this.preloadImage(item.image_link));
+      });
+
+      // Preload audio images and files
+      this.audios.forEach(item => {
+        preloadPromises.push(this.preloadImage(item.cropped_image));
+        preloadPromises.push(this.preloadImage(item.image_link));
+        if (item.mp3_file) {
+          preloadPromises.push(this.preloadAudio(item.mp3_file));
+        }
+      });
+
+      // Preload all assets in the background
+      Promise.all(preloadPromises).catch(error => {
+        console.error('Error preloading assets:', error);
+      });
     },
     preloadImage(url) {
       return new Promise((resolve, reject) => {
@@ -307,7 +296,14 @@ export default {
       // First replace the special line break sequence with <br>
       let formattedText = text.replace(/\\n/g, '<br>');
       
-      // Then replace ```text``` with clickable links
+      // Convert URLs to clickable links
+      // This regex matches URLs starting with http://, https://, or www.
+      formattedText = formattedText.replace(
+        /(https?:\/\/[^\s]+|www\.[^\s]+)/g, 
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+      );
+      
+      // Also handle the special ```text``` format for links
       formattedText = formattedText.replace(/```([^`]+)```/g, (match, url) => {
         // Extract the display text from the URL if it's a GitHub repo
         let displayText = url;
@@ -543,7 +539,7 @@ export default {
   align-items: center;
   background: transparent;
   border-radius: 4px;
-  padding: 48px 40px 20px 56px;
+  padding: 60px 40px 20px 56px;
   gap: 24px;
   width: 100%;
   box-sizing: border-box;
@@ -603,7 +599,7 @@ export default {
   align-items: center;
   background: #eaeaea;
   border-radius: 4px;
-  padding: 48px 40px 20px 40px;
+  padding: 60px 40px 20px 40px;
   width: 100%;
   box-sizing: border-box;
   gap: 24px;
