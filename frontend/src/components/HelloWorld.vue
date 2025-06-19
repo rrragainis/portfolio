@@ -748,6 +748,16 @@ html {
     display: block;
     margin: 5px 0;
   }
+
+  .main-pic-2 {
+    position: absolute;
+    top: 40vh;
+    left: 22vw;
+    width: 60vw;
+    height: 35vh;
+    background: url('@/assets/mainpic2.png') 50%/cover no-repeat;
+    z-index: 1;
+  }
 }
 
 /* Add styles for clickable links */
