@@ -13,8 +13,8 @@ class Cors
 
         $allowedOrigins = [
             'http://46.101.117.113',
-            'http://www.rrragainis.lv',
-            'http://rrragainis.lv'
+            'https://www.rrragainis.lv',
+            'https://rrragainis.lv'
         ];
 
         $origin = $request->header('Origin');

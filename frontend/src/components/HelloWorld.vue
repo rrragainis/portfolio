@@ -32,7 +32,7 @@
           <p>{{ lang === 'lv' ? 'Šie ir programmēšanas projekti, par kuriem jūtos pietiekami labi, lai atrādītu, vai arī, man ļauj atrādīt.' : 'These are coding projects that I have made that I feel confident enough to showcase, or I am allowed to showcase.' }}</p>
           <div class="card-grid">
             <div v-for="item in programmings" :key="item.id" class="work-card" @click="showDetails('programming', item)">
-              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name'] || 'Portfolio image'" class="work-card-image">
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
           </p>
           <div class="card-grid">
             <div v-for="item in photoshops" :key="item.id" class="work-card" @click="showDetails('photoshop', item)">
-              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name'] || 'Portfolio image'" class="work-card-image">
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
           </p>
           <div class="card-grid">
             <div v-for="item in audios" :key="item.id" class="work-card" @click="showDetails('audio', item)">
-              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name']" class="work-card-image">
+              <img :src="getWebpImage(item.cropped_image)" :alt="item[lang + '_name'] || 'Portfolio image'" class="work-card-image">
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@
               <a :href="selectedItem?.image_link" target="_blank" rel="noopener noreferrer">
                 <img
                   :src="getWebpImage(selectedItem?.cropped_image)"
-                  :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
+                  :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name || 'Audio image'"
                   class="audio-album-art"
                 />
               </a>
@@ -124,7 +124,7 @@
             <a :href="selectedItem?.image_link || selectedItem?.cropped_image" target="_blank" rel="noopener noreferrer">
               <img
                 :src="getWebpImage(selectedItem?.image_link || selectedItem?.cropped_image)"
-                :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
+                :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name || 'Visual image'"
                 class="visual-image"
               />
             </a>
@@ -140,7 +140,7 @@
             <a :href="selectedItem?.image_link" target="_blank" rel="noopener noreferrer">
               <img
                 :src="getWebpImage(selectedItem?.image_link)"
-                :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name"
+                :alt="lang === 'lv' ? selectedItem?.latvian_name : selectedItem?.english_name || 'Programming image'"
                 class="programming-image"
               />
             </a>

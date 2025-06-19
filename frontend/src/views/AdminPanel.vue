@@ -19,7 +19,7 @@
                 <div v-for="item in photoshops" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name || 'Portfolio image'" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -47,7 +47,7 @@
                 <div v-for="item in audio" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name || 'Portfolio image'" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -75,7 +75,7 @@
                 <div v-for="item in programmings" :key="item.id" class="list-group-item">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name" class="thumbnail">
+                      <img :src="getWebpImage(getImageUrl(item.cropped_image))" :alt="item.name || 'Portfolio image'" class="thumbnail">
                       <span class="ms-2">{{ item.name }}</span>
                     </div>
                     <div>
@@ -120,7 +120,7 @@
               <div class="mb-3">
                 <label for="image" class="form-label">Main Image</label>
                 <input type="file" class="form-control" @change="handleImageUpload" accept="image/*" :required="!editingItem">
-                <img v-if="formData.imagePreview" :src="formData.imagePreview" class="image-preview mt-2">
+                <img v-if="formData.imagePreview" :src="formData.imagePreview" class="image-preview mt-2" alt="Image preview">
               </div>
               <div v-if="currentType === 'audio'" class="mb-3">
                 <label for="mp3File" class="form-label">MP3 File</label>
@@ -145,7 +145,7 @@
             <button type="button" class="btn-close" @click="closeCropperModal"></button>
           </div>
           <div class="modal-body">
-            <img ref="cropperImage" :src="cropperImageSrc" style="max-width: 100%;">
+            <img ref="cropperImage" :src="cropperImageSrc" style="max-width: 100%;" alt="Image to crop">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="closeCropperModal">Cancel</button>
@@ -166,7 +166,7 @@
           <div class="modal-body">
             <div class="gallery-container">
               <div class="gallery-image-container">
-                <img :src="currentGalleryImage" class="gallery-image" :alt="currentGalleryItem.name">
+                <img :src="currentGalleryImage" class="gallery-image" :alt="currentGalleryItem.name || 'Gallery image'">
                 <div class="gallery-navigation">
                   <button class="btn btn-light" @click="previousImage" :disabled="currentImageIndex === 0">
                     Left
