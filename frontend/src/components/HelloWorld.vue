@@ -339,7 +339,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url('@/assets/mainpic1.png') center/cover no-repeat;
+  background: image-set(url('@/assets/mainpic1.webp') type('image/webp'), url('@/assets/mainpic1.png') type('image/png')) center/cover no-repeat;
   z-index: 0;
 }
 
@@ -349,7 +349,7 @@ export default {
   left: 60vw;
   width: 12vw;
   height: 35vh;
-  background: url('@/assets/mainpic2.png') center/cover no-repeat;
+  background: image-set(url('@/assets/mainpic2.webp') type('image/webp'), url('@/assets/mainpic2.png') type('image/png')) center/cover no-repeat;
   z-index: 1;
 }
 
@@ -372,7 +372,7 @@ export default {
 }
 
 .bottom-background {
-  background: url('@/assets/fonapic1.png') top center no-repeat;
+  background: image-set(url('@/assets/fonapic1.webp') type('image/webp'), url('@/assets/fonapic1.png') type('image/png')) top center no-repeat;
   background-size: 100% auto;
   background-attachment: scroll;
   background-repeat: no-repeat;
@@ -755,7 +755,7 @@ html {
     left: 22vw;
     width: 60vw;
     height: 35vh;
-    background: url('@/assets/mainpic2.png') 50%/cover no-repeat;
+    background: image-set(url('@/assets/mainpic2.webp') type('image/webp'), url('@/assets/mainpic2.png') type('image/png')) 50%/cover no-repeat;
     z-index: 1;
   }
 }
